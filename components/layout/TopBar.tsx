@@ -12,13 +12,15 @@ function TopBar() {
   const pathName = usePathname();
   return (
     <div className="sticky top-0 x-20 w-full flex justify-between items-center px-8 py-4 bg-blue-2 shadow-xl lg:hidden">
-      <Image src="/logo.png" alt="logo" width={150} height={70} />
+      <Image src="/smile.png" alt="logo" width={150} height={70} />
       <div className=" flex gap-8 max-md:hidden">
         {navLinks.map((link) => (
           <Link
             href={link.url}
             key={link.label}
-            className={`flex gap-4 text-body-medium ${pathName === link.url? "text-blue-1" : "text-gray-1"}`}
+            className={`flex gap-4 text-body-medium ${
+              pathName === link.url ? "text-blue-1" : "text-gray-1"
+            }`}
           >
             <p>{link.label}</p>
           </Link>

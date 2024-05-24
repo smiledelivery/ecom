@@ -8,7 +8,6 @@ import { Button } from "@/components/ui/button";
 import {
   Form,
   FormControl,
-  FormDescription,
   FormField,
   FormItem,
   FormLabel,
@@ -17,6 +16,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { Textarea } from "../ui/textarea";
 import ImageUpload from "../custom Ui/ImageUpload";
+import { useRouter } from "next/navigation";
 
 const formSchema = z.object({
   title: z.string().min(2).max(30),
@@ -37,6 +37,8 @@ function CollectionForm() {
     console.log(values);
   };
 
+  const router = useRouter();
+
   return (
     <div className="p-10">
       <p className="text-heading2-bold">Create Collection</p>
@@ -56,7 +58,7 @@ function CollectionForm() {
               </FormItem>
             )}
           />
-           <FormField
+          <FormField
             control={form.control}
             name="description"
             render={({ field }) => (
@@ -76,17 +78,28 @@ function CollectionForm() {
               <FormItem>
                 <FormLabel>Image</FormLabel>
                 <FormControl>
-                    <ImageUpload
-                    value={field.value ? [field.value] : [] }
-                    onChange= {(url) => field.onChange(url)}
-                    onRemove= {() => field.onChange("")}
-                    />
+                  <ImageUpload
+                    value={field.value ? [field.value] : []}
+                    onChange={(url) => field.onChange(url)}
+                    onRemove={() => field.onChange("")}
+                  />
                 </FormControl>
                 <FormMessage />
               </FormItem>
             )}
           />
-          <Button type="submit">Submit</Button>
+          <div className=" flex gap-10">
+            <Button type="submit" className="bg-blue-1 text-white">
+              Submit
+            </Button>
+            <Button
+              type="button"
+              className="bg-blue-1 text-white"
+              onClick={() => router.push("/collections")}
+            >
+              Discard
+            </Button>
+          </div>
         </form>
       </Form>
     </div>
