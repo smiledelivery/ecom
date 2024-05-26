@@ -2,7 +2,7 @@
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
-import React from "react";
+import React, { useState } from "react";
 import { Separator } from "@/components/ui/separator";
 import { Button } from "@/components/ui/button";
 import {
@@ -17,6 +17,7 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "../ui/textarea";
 import ImageUpload from "../custom Ui/ImageUpload";
 import { useRouter } from "next/navigation";
+import toast from "react-hot-toast";
 
 const formSchema = z.object({
   title: z.string().min(2).max(30),
@@ -25,6 +26,9 @@ const formSchema = z.object({
 });
 
 function CollectionForm() {
+  const router = useRouter();
+  const [loading, setLoading] = useState(false);
+
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -34,10 +38,24 @@ function CollectionForm() {
     },
   });
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
-    console.log(values);
+    try {
+      setLoading(true);
+      const res = await fetch("/api/collections", {
+        method: "POST",
+        body: JSON.stringify(values),
+      });
+      if (res.ok) {
+        setLoading(false)
+        toast.success("collection created")
+        router.push("/collections");
+      }
+    } catch (error) {
+      console.log("[collection_from_ Post", error)
+      toast.error("something went wrong, please try again")
+    }
   };
 
-  const router = useRouter();
+  
 
   return (
     <div className="p-10">
