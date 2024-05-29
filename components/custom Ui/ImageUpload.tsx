@@ -37,7 +37,9 @@ const ImageUpload: React.FC<ImageUploadProps> = ({
               src={url}
               alt="collection"
               className="object-cover rounded-lg"
-              fill
+              width={200}
+              height={200}
+            //   fill
             />
           </div>
         ))}
@@ -57,7 +59,7 @@ const ImageUpload: React.FC<ImageUploadProps> = ({
           );
         }}
       </CldUploadWidget>
-    </div>
+    </div> 
   );
 };
 

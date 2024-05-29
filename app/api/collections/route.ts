@@ -1,5 +1,5 @@
+import { auth } from '@clerk/nextjs/server';
 import connectDB from "@/lib/mongoDB";
-import { auth } from "@clerk/nextjs/server";
 import { NextRequest, NextResponse } from "next/server";
 import Collection from "@/lib/models/Collection";
 

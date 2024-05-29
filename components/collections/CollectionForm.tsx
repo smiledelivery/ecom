@@ -51,7 +51,7 @@ function CollectionForm() {
       }
     } catch (error) {
       console.log("[collection_from_ Post", error)
-      toast.error("something went wrong, please try again")
+      toast.error("something went wrong! please try again.")
     }
   };
 
