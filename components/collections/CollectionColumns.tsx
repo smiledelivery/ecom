@@ -8,7 +8,13 @@ export const columns: ColumnDef<CollectionType>[] = [
   {
     accessorKey: "title",
     header: "Title",
-    cell: ({ row }) => <p>{row.original.title}</p>,
+    cell: ({ row }) => (
+      <Link
+      className="hover:text-red-1"
+      href={`/collections/${row.original._id}`}>
+        {row.original.title}
+      </Link>
+    ),
   },
   {
     accessorKey: "products",
@@ -17,10 +23,6 @@ export const columns: ColumnDef<CollectionType>[] = [
   },
   {
     id: "actions",
-    cell: ({ row }) => (
-      <Delete
-      //  item="collection" id={row.original._id}
-      />
-    ),
+    cell: ({ row }) => <Delete id={row.original._id} />,
   },
 ];
