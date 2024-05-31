@@ -18,6 +18,7 @@ import { Textarea } from "../ui/textarea";
 import ImageUpload from "../custom Ui/ImageUpload";
 import { useRouter } from "next/navigation";
 import toast from "react-hot-toast";
+import Delete from "../custom Ui/Delete";
 
 const formSchema = z.object({
   title: z.string().min(2).max(30),
@@ -41,6 +42,16 @@ const CollectionForm: React.FC<CollectionFormProps> = ({ initialData }) => {
           image: "",
         },
   });
+
+  const handleKeyPress = (
+    e:
+      | React.KeyboardEvent<HTMLInputElement>
+      | React.KeyboardEvent<HTMLTextAreaElement>
+  ) => {
+    if (e.key === "Enter") {
+      e.preventDefault();
+    }
+  };
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     try {
       setLoading(true);
@@ -54,6 +65,7 @@ const CollectionForm: React.FC<CollectionFormProps> = ({ initialData }) => {
       if (res.ok) {
         setLoading(false);
         toast.success(`Collection ${initialData ? "updated" : "created"}`);
+        window.location.href = "/collections";
         router.push("/collections");
       }
     } catch (error) {
@@ -64,7 +76,14 @@ const CollectionForm: React.FC<CollectionFormProps> = ({ initialData }) => {
 
   return (
     <div className="p-10">
-      <p className="text-heading2-bold">Create Collection</p>
+      {initialData ? (
+        <div className="flex items-center justify-between">
+          <p className="text-heading2-bold">Edit Collection</p>
+          <Delete id="initialData._id" />
+        </div>
+      ) : (
+        <p className="text-heading2-bold">Create Collection</p>
+      )}
       <Separator className="my-2 bg-gray-900" />
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
@@ -75,7 +94,11 @@ const CollectionForm: React.FC<CollectionFormProps> = ({ initialData }) => {
               <FormItem>
                 <FormLabel>Title</FormLabel>
                 <FormControl>
-                  <Input placeholder="title" {...field} />
+                  <Input
+                    placeholder="title"
+                    {...field}
+                    onKeyDown={handleKeyPress}
+                  />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -88,7 +111,12 @@ const CollectionForm: React.FC<CollectionFormProps> = ({ initialData }) => {
               <FormItem>
                 <FormLabel>Description</FormLabel>
                 <FormControl>
-                  <Textarea placeholder="description" {...field} rows={5} />
+                  <Textarea
+                    placeholder="description"
+                    {...field}
+                    rows={5}
+                    onKeyDown={handleKeyPress}
+                  />
                 </FormControl>
                 <FormMessage />
               </FormItem>
