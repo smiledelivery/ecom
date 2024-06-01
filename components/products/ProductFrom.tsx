@@ -260,10 +260,10 @@ const ProductFrom: React.FC<ProductFormProps> = ({ initialData }) => {
             />
             <FormField
               control={form.control}
-              name="tags"
+              name="collections"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Tags</FormLabel>
+                  <FormLabel>Collections</FormLabel>
                   <FormControl>
                     <MultiSelect
                       placeholder="Collections"
@@ -275,6 +275,50 @@ const ProductFrom: React.FC<ProductFormProps> = ({ initialData }) => {
                           ...field.value.filter(
                             (collectionId) => collectionId !== idToRemove
                           ),
+                        ])
+                      }
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+                        <FormField
+              control={form.control}
+              name="colors"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Colors</FormLabel>
+                  <FormControl>
+                    <MultiText
+                      placeholder="Colors"
+                      value={field.value}
+                      onChange={(colors) => field.onChange([...field.value, colors])}
+                      onRemove={(colorToRemove) =>
+                        field.onChange([
+                          ...field.value.filter((colors) => colors !== colorToRemove),
+                        ])
+                      }
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+                        <FormField
+              control={form.control}
+              name="sizes"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Size</FormLabel>
+                  <FormControl>
+                    <MultiText
+                      placeholder="Size"
+                      value={field.value}
+                      onChange={(size) => field.onChange([...field.value, size])}
+                      onRemove={(sizeToRemove) =>
+                        field.onChange([
+                          ...field.value.filter((size) => size !== sizeToRemove),
                         ])
                       }
                     />
