@@ -1,9 +1,11 @@
 "use client";
-import { z } from "zod";
+
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
-import React, { useState } from "react";
-import { Separator } from "@/components/ui/separator";
+import { z } from "zod";
+import { useRouter } from "next/navigation";
+
+import { Separator } from "../ui/separator";
 import { Button } from "@/components/ui/button";
 import {
   Form,
@@ -16,20 +18,23 @@ import {
 import { Input } from "@/components/ui/input";
 import { Textarea } from "../ui/textarea";
 import ImageUpload from "../custom Ui/ImageUpload";
-import { useRouter } from "next/navigation";
+import { useState } from "react";
 import toast from "react-hot-toast";
 import Delete from "../custom Ui/Delete";
 
 const formSchema = z.object({
-  title: z.string().min(2).max(30),
-  description: z.string().min(2).max(500),
+  title: z.string().min(2).max(20),
+  description: z.string().min(2).max(500).trim(),
   image: z.string(),
 });
+
 interface CollectionFormProps {
-  initialData?: CollectionType | null;
+  initialData?: CollectionType | null; //Must have "?" to make it optional
 }
+
 const CollectionForm: React.FC<CollectionFormProps> = ({ initialData }) => {
   const router = useRouter();
+
   const [loading, setLoading] = useState(false);
 
   const form = useForm<z.infer<typeof formSchema>>({
@@ -43,15 +48,12 @@ const CollectionForm: React.FC<CollectionFormProps> = ({ initialData }) => {
         },
   });
 
-  const handleKeyPress = (
-    e:
-      | React.KeyboardEvent<HTMLInputElement>
-      | React.KeyboardEvent<HTMLTextAreaElement>
-  ) => {
+  const handleKeyPress = (e: React.KeyboardEvent<HTMLInputElement> | React.KeyboardEvent<HTMLTextAreaElement>) => {
     if (e.key === "Enter") {
       e.preventDefault();
     }
-  };
+  }
+  
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     try {
       setLoading(true);
@@ -68,9 +70,9 @@ const CollectionForm: React.FC<CollectionFormProps> = ({ initialData }) => {
         window.location.href = "/collections";
         router.push("/collections");
       }
-    } catch (error) {
-      console.log("[collection_from_ Post", error);
-      toast.error("something went wrong! please try again.");
+    } catch (err) {
+      console.log("[collections_POST]", err);
+      toast.error("Something went wrong! Please try again.");
     }
   };
 
@@ -79,12 +81,12 @@ const CollectionForm: React.FC<CollectionFormProps> = ({ initialData }) => {
       {initialData ? (
         <div className="flex items-center justify-between">
           <p className="text-heading2-bold">Edit Collection</p>
-          <Delete id="initialData._id" />
+          <Delete id={initialData._id} item="collection" />
         </div>
       ) : (
         <p className="text-heading2-bold">Create Collection</p>
       )}
-      <Separator className="my-2 bg-gray-900" />
+      <Separator className="bg-grey-1 mt-4 mb-7" />
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
           <FormField
@@ -94,11 +96,7 @@ const CollectionForm: React.FC<CollectionFormProps> = ({ initialData }) => {
               <FormItem>
                 <FormLabel>Title</FormLabel>
                 <FormControl>
-                  <Input
-                    placeholder="title"
-                    {...field}
-                    onKeyDown={handleKeyPress}
-                  />
+                  <Input placeholder="Title" {...field} onKeyDown={handleKeyPress} />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -111,12 +109,7 @@ const CollectionForm: React.FC<CollectionFormProps> = ({ initialData }) => {
               <FormItem>
                 <FormLabel>Description</FormLabel>
                 <FormControl>
-                  <Textarea
-                    placeholder="description"
-                    {...field}
-                    rows={5}
-                    onKeyDown={handleKeyPress}
-                  />
+                  <Textarea placeholder="Description" {...field} rows={5} onKeyDown={handleKeyPress} />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -139,14 +132,14 @@ const CollectionForm: React.FC<CollectionFormProps> = ({ initialData }) => {
               </FormItem>
             )}
           />
-          <div className=" flex gap-10">
+          <div className="flex gap-10">
             <Button type="submit" className="bg-blue-1 text-white">
               Submit
             </Button>
             <Button
               type="button"
-              className="bg-blue-1 text-white"
               onClick={() => router.push("/collections")}
+              className="bg-blue-1 text-white"
             >
               Discard
             </Button>
